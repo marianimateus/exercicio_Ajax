@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Github</title>
+    <link rel="stylesheet" href="main.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <img id="avatar" class="profile-avatar" src="https://via.placeholder.com/180x180" alt="Profile Avatar">
+            <h1 id="name" class="profile-name">Mateus Z. Mariani</h1>
+            <h2 id="username" class="profile-username">@marianimateus</h2>
+            <ul class="numbers">
+                <li class="numbers-item">
+                    <h4>Repositórios</h4>
+                    <span id="repos">5</span>
+                </li>
+                <li class="numbers-item">
+                    <h4>Seguidores</h4>
+                    <span id="followers">5</span>
+                </li>
+                <li class="numbers-item">
+                    <h4>Seguindo</h4>
+                    <span id="following">5</span>
+                </li>
+            </ul>
+            <a id="link" href="https://github.com/marianimateus" class="profile-link" target="_blank">Ver no Github</a>
+        </div>
+    </header>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const nameElement = document.querySelector('#name');
+            const usernameElement = document.querySelector('#username');
+            const avatarElement = document.querySelector('#avatar');
+            const reposElement = document.querySelector('#repos');
+            const followersElement = document.querySelector('#followers');
+            const followingElement = document.querySelector('#following');
+            const linkElement = document.querySelector('#link');
+
+            // Fazendo a requisição com Fetch API e try-catch para tratar erros
+            fetch('https://api.github.com/users/marianimateus')
+                .then(function(res) {
+                    if (!res.ok) {
+                        throw new Error('Falha na requisição: ' + res.status);
+                    }
+                    return res.json();
+                })
+                .then(function(json) {
+                    nameElement.innerText = json.name || 'Nome não disponível';
+                    usernameElement.innerText = '@' + json.login || 'Username não disponível';
+                    avatarElement.src = json.avatar_url || 'https://via.placeholder.com/180x180';
+                    reposElement.innerText = json.public_repos;
+                    followersElement.innerText = json.followers;
+                    followingElement.innerText = json.following;
+                    linkElement.href = json.html_url;
+                })
+                .catch(function(error) {
+                    console.error('Erro ao buscar dados do GitHub:', error);
+                });
+        });
+    </script>
+</body>
+</html>
